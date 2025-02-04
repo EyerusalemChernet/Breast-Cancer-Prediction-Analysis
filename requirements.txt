@@ -3,5 +3,6 @@ uvicorn
 scikit-learn
 pandas
 numpy
+joblib
 seaborn
 matplotlib
