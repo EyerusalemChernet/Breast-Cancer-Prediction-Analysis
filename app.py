@@ -16,7 +16,7 @@ warnings.filterwarnings('ignore')
 app = FastAPI()
 
 # Load the dataset and preprocess
-file_path = r'C:\Users\JERUSA\BreastCancerPrediction\breast-cancer.csv'  # Update path as needed
+file_path = "breast-cancer.csv"  # Update path as needed
 df = pd.read_csv(file_path)
 
 # Drop the 'id' column and map diagnosis to binary
