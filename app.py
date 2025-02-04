@@ -2,11 +2,8 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import pandas as pd
 import numpy as np
-from sklearn.linear_model import LogisticRegression
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
 import pickle
+import os
 import warnings
 
 # Suppress warnings
@@ -15,42 +12,23 @@ warnings.filterwarnings('ignore')
 # Initialize the FastAPI app
 app = FastAPI()
 
-# Load the dataset and preprocess
-file_path = "breast-cancer.csv"  # Update path as needed
-df = pd.read_csv(file_path)
+# File paths
+file_path = "breast-cancer.csv"
+model_path = "model.pkl"
+scaler_path = "scaler.pkl"
 
-# Drop the 'id' column and map diagnosis to binary
-df.drop(columns=['id'], inplace=True)
-df['diagnosis'] = df['diagnosis'].map({'M': 1, 'B': 0})
+# Ensure the CSV file exists before proceeding
+if not os.path.exists(file_path):
+    raise FileNotFoundError(f"Dataset file '{file_path}' not found!")
 
-# Split the data into features and target
-X = df.drop(columns=['diagnosis'])
-y = df['diagnosis']
+# Load the trained model and scaler
+if not os.path.exists(model_path) or not os.path.exists(scaler_path):
+    raise FileNotFoundError("Model or scaler file missing! Train and save them first.")
 
-# Split the data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Standardize the features
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled = scaler.transform(X_test)
-
-# Train the logistic regression model
-model = LogisticRegression()
-model.fit(X_train_scaled, y_train)
-
-# Save the model and scaler for later use
-with open('model.pkl', 'wb') as f:
-    pickle.dump(model, f)
-
-with open('scaler.pkl', 'wb') as f:
-    pickle.dump(scaler, f)
-
-# Load the model and scaler
-with open('model.pkl', 'rb') as f:
+with open(model_path, 'rb') as f:
     model = pickle.load(f)
 
-with open('scaler.pkl', 'rb') as f:
+with open(scaler_path, 'rb') as f:
     scaler = pickle.load(f)
 
 # Pydantic model for input validation
@@ -89,54 +67,61 @@ class InputData(BaseModel):
 # Define an endpoint for predictions
 @app.post("/predict")
 def predict(data: InputData):
-    # Prepare the input data for prediction
-    input_data = np.array([[
-        data.radius_mean,
-        data.texture_mean,
-        data.perimeter_mean,
-        data.area_mean,
-        data.smoothness_mean,
-        data.compactness_mean,
-        data.concavity_mean,
-        data.concave_points_mean,
-        data.symmetry_mean,
-        data.fractal_dimension_mean,
-        data.radius_se,
-        data.texture_se,
-        data.perimeter_se,
-        data.area_se,
-        data.smoothness_se,
-        data.compactness_se,
-        data.concavity_se,
-        data.concave_points_se,
-        data.symmetry_se,
-        data.fractal_dimension_se,
-        data.radius_worst,
-        data.texture_worst,
-        data.perimeter_worst,
-        data.area_worst,
-        data.smoothness_worst,
-        data.compactness_worst,
-        data.concavity_worst,
-        data.concave_points_worst,
-        data.symmetry_worst,
-        data.fractal_dimension_worst
-    ]])
+    try:
+        # Prepare input for prediction
+        input_data = np.array([[
+            data.radius_mean,
+            data.texture_mean,
+            data.perimeter_mean,
+            data.area_mean,
+            data.smoothness_mean,
+            data.compactness_mean,
+            data.concavity_mean,
+            data.concave_points_mean,
+            data.symmetry_mean,
+            data.fractal_dimension_mean,
+            data.radius_se,
+            data.texture_se,
+            data.perimeter_se,
+            data.area_se,
+            data.smoothness_se,
+            data.compactness_se,
+            data.concavity_se,
+            data.concave_points_se,
+            data.symmetry_se,
+            data.fractal_dimension_se,
+            data.radius_worst,
+            data.texture_worst,
+            data.perimeter_worst,
+            data.area_worst,
+            data.smoothness_worst,
+            data.compactness_worst,
+            data.concavity_worst,
+            data.concave_points_worst,
+            data.symmetry_worst,
+            data.fractal_dimension_worst
+        ]])
 
-    # Scale the input data
-    input_data_scaled = scaler.transform(input_data)
+        # Scale input data
+        input_data_scaled = scaler.transform(input_data)
 
-    # Predict the diagnosis
-    prediction = model.predict(input_data_scaled)
-    prediction_prob = model.predict_proba(input_data_scaled)[:, 1]
+        # Predict diagnosis
+        prediction = model.predict(input_data_scaled)
+        prediction_prob = model.predict_proba(input_data_scaled)[:, 1]
 
-    # Return the prediction and probability
-    return {
-        "prediction": "Malignant" if prediction[0] == 1 else "Benign",
-        "probability": prediction_prob[0].tolist()
-    }
+        return {
+            "prediction": "Malignant" if prediction[0] == 1 else "Benign",
+            "probability": prediction_prob[0].tolist()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # Root endpoint for health check
 @app.get("/")
 def read_root():
     return {"message": "Breast Cancer Prediction API is running!"}
+
+# Run the app when executed directly
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
