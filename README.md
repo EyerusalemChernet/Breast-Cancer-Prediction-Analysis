@@ -1,29 +1,21 @@
 📌 Breast Cancer Prediction and Analysis
 Deployed using FastAPI on Render: https://breast-cancer-prediction-and-analysis.onrender.com
+
+
 🏥 Early Detection of Breast Cancer Using Machine Learning
 
-
-📖 Table of Contents
-
-Introduction
-Dataset
-Project Workflow
-Technologies Used
-How to Run the Project
-API Usage
-Results
-Future Improvements
-Author
-Acknowledgments
 
 📌 Introduction
 Breast cancer is one of the most prevalent cancers affecting women worldwide. Early detection can increase survival rates significantly. This project leverages machine learning to classify tumors as benign or malignant based on medical imaging features.
 
 This repository includes:
-✅ Data Preprocessing & Visualization
-✅ Machine Learning Model Training & Evaluation
-✅ Deployment of the Model as an API using FastAPI
-✅ Real-time Predictions via a REST API
+✅ Data Preprocessing & Visualization.
+
+✅ Machine Learning Model Training & Evaluation.
+
+✅ Deployment of the Model as an API using FastAPI.
+
+✅ Real-time Predictions via a REST API.
 
 📊 Dataset
 Source: Kaggle - Breast Cancer Dataset
@@ -32,6 +24,8 @@ Target Variable:
 0 → Benign (Non-cancerous)
 1 → Malignant (Cancerous)
 Features: Radius, Texture, Perimeter, Area, Compactness, Concavity, etc.
+
+
 🛠 Project Workflow
 1️⃣ Data Cleaning & Preprocessing
 2️⃣ Exploratory Data Analysis (EDA)
