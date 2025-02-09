@@ -17,6 +17,7 @@ This repository includes:
 
 ✅ Real-time Predictions via a REST API.
 
+
 📊 Dataset
 Source: Kaggle - Breast Cancer Dataset
 Size: 569 instances, 32 attributes
@@ -57,9 +58,11 @@ Edit
 pip install -r requirements.txt  
 3️⃣ Train the Model & Save It
 Run the breastcancer.ipynb notebook to:
-✅ Preprocess the dataset
-✅ Train the Logistic Regression model
-✅ Save the trained model (model.pkl) and scaler (scaler.pkl)
+✅ Preprocess the dataset.
+
+✅ Train the Logistic Regression model.
+
+✅ Save the trained model (model.pkl) and scaler (scaler.pkl).
 
 4️⃣ Start the API
 Run the FastAPI server using Uvicorn:
