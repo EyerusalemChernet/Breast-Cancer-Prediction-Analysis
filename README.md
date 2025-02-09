@@ -3,6 +3,7 @@
 
 
 📖 Table of Contents
+
 Introduction
 Dataset
 Project Workflow
@@ -13,6 +14,7 @@ Results
 Future Improvements
 Author
 Acknowledgments
+
 📌 Introduction
 Breast cancer is one of the most prevalent cancers affecting women worldwide. Early detection can increase survival rates significantly. This project leverages machine learning to classify tumors as benign or malignant based on medical imaging features.
 
@@ -136,5 +138,6 @@ Fast real-time predictions via the API
 Eyerusalem Chernet
 
 📧 Email: Jerusalemroronoa@gmail.com
+
 🙌 Acknowledgments
 Thanks to Kaggle for the dataset and FastAPI for making API deployment easy!
