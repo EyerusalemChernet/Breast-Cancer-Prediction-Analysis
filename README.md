@@ -1,5 +1,5 @@
 📌 Breast Cancer Prediction and Analysis
-Deployed using FastAPI on Render: https://breast-cancer-prediction-and-analysis.onrender.com
+Deployed using FastAPI on Render: https://breast-cancer-prediction-and-analysis.onrender.com/docs
 
 
 🏥 Early Detection of Breast Cancer Using Machine Learning
