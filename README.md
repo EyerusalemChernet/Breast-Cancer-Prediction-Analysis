@@ -15,7 +15,7 @@ This repository includes:
 
 ✅ Deployment of the Model as an API using FastAPI.
 
-✅ Real-time Predictions via a REST API.
+✅ Real-time Predictions.
 
 
 📊 Dataset
